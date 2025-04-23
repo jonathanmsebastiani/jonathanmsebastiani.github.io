@@ -1,0 +1,219 @@
+---
+title: "Highest Interconnected Flights in the US During 2010"
+author: "Jonathan Sebastiani: UWB student"
+output:
+  html_document:
+    toc: true
+    toc_depth: '3'
+---
+
+# Research Question
+Which flights have the highest interconnection in the US during 2010 and why?
+
+# Summary
+In this analysis of the US airport network in 2010, I used an edge list and attribute file to correlate the names of airports to statistically significant connections using degree. I first needed to correlate the names of flights with the correct flight ID number using the [attribute file](http://opsahl.co.uk/tnet/datasets/USairport_2010_codes.txt). After that, I was able to create a graph object and weighed nodes based on degree. This is an undirected graph, so I did not need to worry about in and out degree individually. I added a layer of clustering based on edge betweenness to overlay the graph and draw baseline insights over the entire graph itself.
+
+After realizing how messy the data was, I reduced the data by taking the 25 airports with the highest degree and plotting them on a separate graph. I then calculated another fast greedy clustering overlay to draw conclusions on my data set.
+
+Finally, I did network wide of compactness, and edge density with the newly reduced data set to see how high degree airports interacted with each other. Relating my findings to quick analyses of [corresponding airports](https://www.bts.gov/topics/airlines-and-airports/world-airport-codes) online helped me to relate my findings from data back to real life connections.
+
+# About the data
+This dataset is the complete US airport network in 2010. This is the network used in the first part of the [Why Anchorage is not (that) important: Binary ties and Sample selection-blog post](https://toreopsahl.com/2011/08/12/why-anchorage-is-not-that-important-binary-ties-and-sample-selection/). The data is downloaded from the Bureau of Transportation Statistics (BTS) Transtats site ([Table T-100; id 292](http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=292)) with the following filters: Geography=all; Year=2010; Months=all; and columns: Passengers, Origin, and Destination. For weights I am using degree centrallity. Even though this type of networks is directed by nature as a flight is scheduled from one airport and to another, the networks are highly symmetric (Barrat et al., 2004). Therefore, the version of this network is undirected (i.e., the weight of the tie from one airport towards another is equal to the weight of the reciprocal tie). The [airport codes](http://opsahl.co.uk/tnet/datasets/USairport_2010_codes.txt) are converted into id numbers, and the weights of duplicated ties are summed up. Also ties with a weight of 0 are removed (only cargo), and self-loops removed.
+
+## Data Files Used
+
+* The weighted static one-mode network in [tnet-format](http://opsahl.co.uk/tnet/datasets/USairport_2010.txt) and [UCINET-format](http://opsahl.co.uk/tnet/datasets/USairport_2010.dl)
+
+* [Attribute file](http://opsahl.co.uk/tnet/datasets/USairport_2010_codes.txt) with airport codes
+
+* [Webpage](https://www.bts.gov/topics/airlines-and-airports/world-airport-codes) to correlate the airport codes to their real names
+
+
+# Graphical Analysis
+
+
+## Code Setup
+
+```{r message=FALSE}
+setwd("~/Documents/Network-Analysis/Final Project")
+
+library(igraph)
+library(tidyverse)
+library(tnet)
+library(asnipe)
+
+# Read in the airport edges from the webpage
+airport_links <- read.table("http://opsahl.co.uk/tnet/datasets/USairport500.txt", header = F, as.is = T)
+
+# Read in the airport attribute file consisting of airline codes from the webpage
+airport_nodes <- read.table("http://opsahl.co.uk/tnet/datasets/USairport_2010_codes.txt", header = F, as.is = T)
+
+# Links only have top 500 airports so I will reduce the nodes data frame
+airport_nodes <- head(airport_nodes, 500)
+
+# Now create the graph object
+Airport_Network <- graph_from_data_frame(d=airport_links, vertices=airport_nodes, directed = TRUE)
+
+# Assigning names to the airport network
+V(Airport_Network)$name <- airport_nodes$V2
+E(Airport_Network)$weights <- airport_links$V3
+```
+
+
+## Plot of the Whole Network
+
+```{r}
+# Calculate degree centrality for each node 
+# (in and out will both be the same so I just chose "in")
+node_degree <- degree(Airport_Network, mode="in")
+
+# Plot
+set.seed(2022)
+plot(Airport_Network, 
+     vertex.size= airport_links$V3/120000, 
+     vertex.color="orange",
+     edge.arrow.size= 0,
+     vertex.label = V(Airport_Network)$name, 
+     vertex.label.cex = 0.5,
+     vertex.label.color = "blue",
+     edge.width = 0.5,
+     edge.color = "darkgray"
+     )
+
+# Substituting for now
+#      vertex.size= node_degree / 13, 
+
+```
+
+Here we see the graph of 500 airlines and their connecting flights. Edges are not weighed and the nodes are weighed based on degree.
+
+
+## Plot of the Whole Network; Clustering based on Edge Betweenness
+
+```{r}
+# Calculate the Edge Betweenness Coefficient
+Airport_Edge_Betweenness <- cluster_edge_betweenness(Airport_Network, modularity = TRUE)
+
+# Plot
+set.seed(2022)
+plot(Airport_Edge_Betweenness,
+     Airport_Network, 
+     vertex.size= node_degree / 13, 
+     vertex.color="orange",
+     edge.arrow.size= 0,
+     vertex.label = NA, 
+     vertex.label.cex = 0.5,
+     vertex.label.color = "blue",
+     edge.color = "darkgray",
+     edge.width = 0.5)
+```
+
+Here is the same plot as before, but with an overlay of edge betweenness clustering. Edge betweenness quantifies the number of shortest paths between pairs of nodes that pass through the edge. Edges with high betweenness are considered crucial for maintaining the connectivity within the network because they act as bridges over which many shortest paths traverse.
+
+We now have a relative idea of what our network looks like, but there is too much going on here. There are many different clusters, and a lot of nodes that show very low levels of degree. 
+
+Lets reduce the data to the top 5% of airports with the highest degree so we can draw better conclusions.
+
+
+## Plot of the Aiports with highest 5% Degree Centrality
+
+```{r}
+# Find the top 5% of nodes by degree (strength)
+node_strengths <- strength(Airport_Network, mode="all", weights=E(Airport_Network)$weight)
+top_5_percent_threshold <- quantile(node_strengths, 0.95)
+top_5_percent_nodes <- V(Airport_Network)[node_strengths >= top_5_percent_threshold]
+
+# Subset the graph to include only the top 5% nodes
+Top_5_Percent_Network <- induced_subgraph(Airport_Network, top_5_percent_nodes)
+
+# Plot the top 5 percent graph
+set.seed(2022)
+plot(Top_5_Percent_Network,
+     vertex.size=node_strengths[top_5_percent_nodes] / 10,
+     vertex.color="orange",
+     edge.arrow.size=0,
+     edge.color = "darkgray",
+     vertex.label=V(Top_5_Percent_Network)$name,
+     vertex.label.cex=0.7,
+     vertex.label.color="blue",
+     vertex.label.font=2,
+     vertex.frame.color=NA,
+     edge.width = 0.25
+     )
+```
+
+With the graphs before, adding the labels of the airlines to the graph would have caused too much confusion. Now that we have reduced the data, we can visualize airlines with the highest levels of degree easily so I have added the labels.
+
+We can immediately draw the conclusion that there are many ties between all the airports. Lets dig deeper by clustering this graph again.
+
+
+## Plot of the Aiports with highest 5% Degree Centrality; Clustering based on Edge Betweenness
+
+```{r}
+# Calculate the Edge Betweenness Coefficient
+Top_5_Percent_Network_Edge_Betweenness <- cluster_edge_betweenness(Top_5_Percent_Network, modularity = TRUE)
+
+# Plot the top 5 percent graph with edge betweeness
+set.seed(2022)
+plot(Top_5_Percent_Network_Edge_Betweenness,
+     Top_5_Percent_Network,
+     vertex.size=node_strengths[top_5_percent_nodes] / 10,
+     vertex.color="orange",
+     edge.arrow.size=0,
+     edge.color = "darkgray",
+     vertex.label=V(Top_5_Percent_Network)$name,
+     vertex.label.cex=0.7,
+     vertex.label.color="blue",
+     vertex.label.font=2,
+     vertex.frame.color=NA,
+     edge.width = 0.25
+     )
+```
+
+Confirming the immediate hypothesis, we can see that there is only a single large cluster within the network made up of the 25 airports with the highest degree.
+
+Since the graph itself can be a bit hard to interpret, I moved to drawing conclusions through calculations.
+
+
+# Numerical Analysis
+
+
+## What is the edge density of the Top 5% Airport Network?
+
+```{r}
+edge_density(Top_5_Percent_Network)
+```
+
+Edge density tells us how many of the ties are observed divided by the total possible ties. An edge density of 0.9566667 means that any of the airports in this network has about a 95.67% chance of having a tie to any different airport in this network.
+
+
+## What is the compactness of the Top 5% Airport Network?
+
+```{r}
+# Creating compactness function with the top 5% airport network
+compactness <- function(Top_5_Percent_Network) {
+  gra.geo <- distances(Top_5_Percent_Network) ## generate geodesic distances
+  gra.rdist <- 1/gra.geo  ## reciprocal of geodesics
+  diag(gra.rdist) <- NA   ## assign NA to diagonal
+  gra.rdist[gra.rdist == Inf] <- 0 ## replace infinity with 0
+  # Compactness = mean of reciprocal distances
+  comp.igph <- mean(gra.rdist, na.rm=TRUE) 
+  return(comp.igph)
+}
+
+# Calculate the compactness
+compactness(Top_5_Percent_Network)
+```
+
+Compactness is a level of how "clumpy" a network is. A compactness of 0.9783333 means that our network of airports is extremely clumpy and tends to be more cohesive.
+
+
+# Final Summary
+
+Airports that have a high degree centralization have a high connection of ties with the other airports that also have a high degree centralization. Based on our compactness measure and visualizations, we can conclude that there is a high amount of cohesion within higher degree airports.
+
+After taking at look at some of airports with the highest level of degree centralization, I found that these airports were **not** "large" airports as I would have anticipated. For example, airport 1G4 [Grand Canyon West Airport](https://en.wikipedia.org/wiki/Grand_Canyon_West_Airport) is about 350 acres and has 1 runway, airport 06A, [Moton Field Municipal Airport](https://en.wikipedia.org/wiki/Moton_Field_Municipal_Airport), is about 275 acres and has 1 runway, and airport 08A, [Wetumpka Municipal Airport](https://en.wikipedia.org/wiki/Wetumpka_Municipal_Airport), is 312 acres and has 2 runways. For the other airports I checked, I had similar findings. I knew that airports with high degree centrality were not correlated to larger airports because airports that had the highest amount of passenger traffic consisted of airports like DXB, [Dubai International Airport](https://simple.wikipedia.org/wiki/Dubai_International_Airport), which is stated as, "the world's biggest airport for international passenger traffic, and the 19th biggest for passenger traffic", airport DWA, [Yolo County Airport](https://en.wikipedia.org/wiki/Yolo_County_Airport) which has one runway, and airport EGE, [Eagle County Regional Airport](https://en.wikipedia.org/wiki/Eagle_County_Regional_Airport), which covers 632 acres with one runway.
+
+I hypothesize that these more remote airports have such a high level of degree centrality because they are able to go to many more locations and have flights come in from many varying locations. I theorize that flights may be more personalized (1 or 2 passengers) so planes can be flown to a number of possible locations. Larger airports act more like a hub rather than having the flexibility of a smaller airport.
+
+I openly encourage someone to use my findings and look deeply into this to draw more accurate conclusions. Limitations may include getting relevant data from 2010 rather than current times with corresponding airports. I suggest trying to find updated data through similar resources that I have used.
