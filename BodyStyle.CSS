@@ -1,4 +1,3 @@
-/*
 html{
   background-color: cornflowerblue;
   margin:0;
@@ -7,9 +6,14 @@ html{
   text-align:center;
 }
 
-body{
-  margin:0;
+h1{
+  font-size: 3em;
+  font-weight:lighter;
 }
+
+/*
+
+Might use later
 
 .heading {
   margin:0;
@@ -18,52 +22,19 @@ body{
   background-color: lightblue;
 }
 
-.navbar{
-  align-items: center;
-}
-
-.homebar{
-  box-sizing: border-box;
-  border: 1em black;
-  text-align: center;
-  border-width: 3em;
-}
-
-.aboutbar{
-  box-sizing: border-box;
-  border:0.2em black;
-  text-align: center;
-  border-width: 3em;
-}
-
-h1{
-  font-size: 3em;
-  font-weight:lighter;
-}
-
 h2{
   font-size: 1em;
   font-weight:lighter;
 }
 
-
-Not using this but might use later
-
-.parent {
-  border: 0.3em inset darkgreen;
-  margin: 0;
-  padding: 0.5em;
-  text-align: center;
-  background-color: bisque;
+body{
+  margin:0;
 }
 
-.child {
-  display: inline-block;
-  border: 0.3em inset red;
-  overflow: auto;
-  width: 15%;
-  max-width: fit-content;
+.navbar{
   box-sizing: border-box;
-  padding: 0;
+  border: 1em black;
+  text-align: center;
+  border-width: 3em;
 }
-  */
+*/
