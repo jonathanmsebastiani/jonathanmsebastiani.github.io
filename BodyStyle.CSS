@@ -11,6 +11,14 @@ h1{
   font-weight:lighter;
 }
 
+body{
+  margin:0;
+  box-sizing: border-box;
+  border: 1em black;
+  text-align: center;
+  border-width: 3em;
+}
+
 /*
 
 Might use later
