@@ -1,7 +1,5 @@
 html{
   background-color: cornflowerblue;
-  margin:0;
-  font-family: "Lucida Console", "Courier New", monospace;
   font-size: 175%;
   text-align:center;
 }
@@ -11,17 +9,15 @@ h1{
   font-weight:lighter;
 }
 
-body{
-  margin:0;
-  box-sizing: border-box;
-  border: 1em black;
-  text-align: center;
-  border-width: 3em;
-}
-
 /*
 
+p {
+  border: 1em solid black;
+  text-indent: 50px;
+}
+
 Might use later
+line-height: 1;
 
 .heading {
   margin:0;
