@@ -1,90 +1,11 @@
 <!DOCTYPE html>
 <html lang="en-US">
+<link rel="stylesheet", href="BodyStyle.CSS">
 <head>
   <meta charset="UTF-8">
+
   <title>Jonathan Sebastiani</title>
-  <style>
-    html {
-      background-color: whitesmoke;
-      font-size: 175%;
-      text-align:center;
-    }
-    h1 {
-      color: rgb(0, 60, 0);
-      font-size: 200%;
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
-    h2 {
-      margin-bottom: 5px;
-      margin-top: 5px;
-      font-size: 100%;
-    }
-    h3 {
-      margin-bottom: 5px;
-      margin-top: 5px;
-    }
-    h5 {
-      margin-bottom: 5px;
-      margin-top: 5px;
-    }
-    p {
-      margin-bottom: 5px;
-      margin-top: 5px;
-      border-style: solid;
-      font-size: 80%;
-      padding: 5px;
-      border-radius: 2px;
-    }
 
-    /* NAV BAR CONTAINER */
-    nav {
-      display: flex;
-      background-color: rgb(0, 60, 0);
-      height: 50px;
-      position: relative;
-    }
-    /* MAIN NAV BUTTONS */
-    nav > .nav-item {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      position: relative;
-      cursor: pointer;
-      border: 1px, solid, black;
-    }
-    nav > .nav-item:hover {
-      background-color: rgb(0, 120, 0);
-    }
-    /* DROPDOWN MENU STYLES */
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 50px;
-      left: 0;
-      background-color: rgb(0, 60, 0);
-      width: 100%;
-      z-index: 1;
-      flex-direction: column;
-    }
-    .dropdown-content a {
-      padding: 12px;
-      color: white;
-      text-decoration: none;
-      text-align: center;
-    }
-    .dropdown-content a:hover {
-      background-color: rgb(0, 120, 0);
-    }
-    /* SHOW DROPDOWN ON HOVER */
-    .dropdown:hover .dropdown-content {
-      display: flex;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -105,10 +26,12 @@
   <br>
 
   <nav>
-    <a class="nav-item" href="index.html">Home</a>
+    <a class="nav-item" href="index.html">About Me</a>
+
+    <a class="nav-item" href="CV.html">Resume/CV</a>
 
     <div class="nav-item dropdown">
-      Notable Projects
+      Notable Projects &#x25BE
       <div class="dropdown-content">
         <a href="bioinformatics.html">Bioinformatics</a>
         <a href="networkanalysis.html">Network Analysis</a>
@@ -117,9 +40,7 @@
     </div>
   </nav>
 
-  <h2>About Me</h2>
-  
-  <p>
+  <p style = "border-style: solid; padding: 5px; border-radius: 2px;">
     Dedicated data visualization student who is driven, technically strong, and adaptable. Aiming to leverage my interdisciplinary background, intellectual curiosity, and personal values to advance data and software projects toward impactful results. Frequently praised as a problem solver and driving force in team projects by my peers and supervisors, I will be an asset to any group in achieving its goals.
   </p>
 
@@ -130,7 +51,7 @@
   <div style="position: relative; bottom: 0; text-align: center;">
     <br>
     <h5>Developed by: Jonathan Sebastiani</h5>
-    <h5>Last updated: June 25th, 2025</h5>
+    <h5>Last updated: June 26th, 2025</h5>
   </div>
 
 </body>
