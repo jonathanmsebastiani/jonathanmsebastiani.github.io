@@ -9,6 +9,15 @@ h1{
   font-weight:lighter;
 }
 
+div.container {
+  text-align: center;
+}
+
+ul.myUL {
+  display: inline-block;
+  text-align: left;
+  margin-bottom: 10px
+}
 /*
 
 p {

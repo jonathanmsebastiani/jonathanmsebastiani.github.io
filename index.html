@@ -1,32 +1,137 @@
-<!-- My work website - Main Page -->
-
 <!DOCTYPE html>
-<link rel="stylesheet", href="BodyStyle.CSS">
 <html lang="en-US">
-
 <head>
-    <title>Jonathan Sebastiani</title>
+  <meta charset="UTF-8">
+  <title>Jonathan Sebastiani</title>
+  <style>
+    html {
+      background-color: whitesmoke;
+      font-size: 175%;
+      text-align:center;
+    }
+    h1 {
+      color: rgb(0, 60, 0);
+      font-size: 200%;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    h2 {
+      margin-bottom: 5px;
+      margin-top: 5px;
+      font-size: 100%;
+    }
+    h3 {
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+    h5 {
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+    p {
+      margin-bottom: 5px;
+      margin-top: 5px;
+      border-style: solid;
+      font-size: 80%;
+      padding: 5px;
+      border-radius: 2px;
+    }
+
+    /* NAV BAR CONTAINER */
+    nav {
+      display: flex;
+      background-color: rgb(0, 60, 0);
+      height: 50px;
+      position: relative;
+    }
+    /* MAIN NAV BUTTONS */
+    nav > .nav-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      position: relative;
+      cursor: pointer;
+      border: 1px, solid, black;
+    }
+    nav > .nav-item:hover {
+      background-color: rgb(0, 120, 0);
+    }
+    /* DROPDOWN MENU STYLES */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      background-color: rgb(0, 60, 0);
+      width: 100%;
+      z-index: 1;
+      flex-direction: column;
+    }
+    .dropdown-content a {
+      padding: 12px;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+    .dropdown-content a:hover {
+      background-color: rgb(0, 120, 0);
+    }
+    /* SHOW DROPDOWN ON HOVER */
+    .dropdown:hover .dropdown-content {
+      display: flex;
+    }
+
+  </style>
 </head>
 
 <body>
 
-<h1>Jonathan Sebastiani</h1>
-<h3 style="color:red;">Website in development</h3>
+  <h1 style="margin-top: 10px; margin-bottom: 0px;">Jonathan Sebastiani's</h1>
+  <h1 style="margin-top: 0px; margin-bottom: 10px;">Portfolio Webpage</h1>
+  <h3 style= 
+  "color:rgb(172, 0, 0); 
+  font-size: 100%; 
+  font-weight: 100;
+  border-style: double;
+  border-width: 4px;
+  border-radius: 5px;
+  width: 300px;
+  margin: auto;"
+  >Website in development</h3>
 
-<p>
-    <a href="bioinformatics.html">Bioinformatics Algorithms: Final Project</a>
-</p>
-<p>
-    <a href="networkanalysis.html">Network Analysis: Final Project</a>
-</p>
-<p>
-    <a href="environmentalmonitoring.html">Environmental Monitoring: Final Project</a>
-</p>
+  <br>
 
-<div style="position: relative; bottom: 0; text-align: center;">
+  <nav>
+    <a class="nav-item" href="index.html">Home</a>
+
+    <div class="nav-item dropdown">
+      Notable Projects
+      <div class="dropdown-content">
+        <a href="bioinformatics.html">Bioinformatics</a>
+        <a href="networkanalysis.html">Network Analysis</a>
+        <a href="environmentalmonitoring.html">Environmental Monitoring</a>
+      </div>
+    </div>
+  </nav>
+
+  <h2>About Me</h2>
+  
+  <p>
+    Dedicated data visualization student who is driven, technically strong, and adaptable. Aiming to leverage my interdisciplinary background, intellectual curiosity, and personal values to advance data and software projects toward impactful results. Frequently praised as a problem solver and driving force in team projects by my peers and supervisors, I will be an asset to any group in achieving its goals.
+  </p>
+
+  <img src="GraduationPicture.jpg" alt="2025 UWB Gradutation" width="500px">
+
+  <br>
+
+  <div style="position: relative; bottom: 0; text-align: center;">
     <br>
-    <h5>Created by: Jonathan Sebastiani</h5>
-    <h5>Last updated: May 23, 2025</h5>
-</div>
+    <h5>Developed by: Jonathan Sebastiani</h5>
+    <h5>Last updated: June 25th, 2025</h5>
+  </div>
+
 </body>
 </html>
