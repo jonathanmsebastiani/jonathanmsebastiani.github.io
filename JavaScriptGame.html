@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<link rel="stylesheet" , href="BodyStyle.CSS">
+<html lang="en">
+
+<head>
+    <title>Snake Videogame - JavaScript</title>
+    <style>
+        canvas {
+            border: 5px solid rgb(0, 216, 232);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Snake Videogame - JavaScript</h1>
+
+    <nav>
+        <a class="nav-item" href="index.html">Home</a>
+
+        <a class="nav-item" href="CV.html">CV and Transcript</a>
+
+        <div class="nav-item dropdown">
+            Notable Projects &#x25BE
+            <div class="dropdown-content">
+                <a href="bioinformatics.html">Bioinformatics</a>
+                <a href="networkanalysis.html">Network Analysis</a>
+                <a href="environmentalmonitoring.html">Environmental Monitoring</a>
+                <a href="JavaScriptGame.html">Snake Videogame - JavaScript</a>
+            </div>
+        </div>
+    </nav>
+
+    <div style="margin: 15px;">
+        <button id="startBtn">Start Game</button>
+        <button id="resetBtn">Reset</button>
+    </div>
+    <div style="margin: 15px; font-size: 1.2em;">
+        Score: <span id="score">1</span>
+        <br>
+        Speed: <span id="speed">300</span> ms
+    </div>
+
+    <canvas id="game" width="400" height="400">The game canvas could not be loaded</canvas>
+
+    <script>
+        // Setup
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        let gameStarted = false;
+
+        // Grid size
+        const gridSize = 20;
+        const tileWidth = canvas.width / gridSize;
+        let gridMatrix = createMatrix(gridSize);
+
+        // Snake variables
+        let snake = [
+            [9, 9],
+            [8, 9]
+        ];
+        let ateFood = false;
+        let hitTail = false;
+        let hitWall = false;
+        let newDirection = "right";
+        let lastDirection = "right";
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        scoreDisplay.textContent = score;
+        let speed = Math.max(300 - score * 10, 60);
+        const speedDisplay = document.getElementById('speed');
+        speedDisplay.textContent = speed;
+        gridMatrix[9][9] = 1; // Add to the grid
+        gridMatrix[8][9] = 2;
+
+        // Initially add a single food
+        addNewFood();
+
+        // Initially draw the grid, snake, and food
+        draw();
+
+        // Add food to a random location
+        function addNewFood() {
+            let found = false;
+
+            // Put a food in a 0 location
+            do {
+                let newFoodLocation = [Math.floor(Math.random() * gridSize), Math.floor(Math.random() * gridSize)];
+                if (gridMatrix[newFoodLocation[0]][newFoodLocation[1]] === 0) {
+                    gridMatrix[newFoodLocation[0]][newFoodLocation[1]] = 3;
+                    found = true;
+                }
+            } while (found === false);
+        }
+
+        // Move the snake based on the direction
+        function moveSnake(ateFood) {
+            let newHead = [snake[0][0], snake[0][1]]; // Duplicate the current head
+
+            // Logic for updating new head position based on direction
+            // Can't move backwards
+            if (newDirection === "right") {
+                if (lastDirection === "left") {
+                    newHead[0] -= 1;
+                } else {
+                    newHead[0] += 1;
+                    lastDirection = newDirection;
+                }
+            }
+
+            if (newDirection === "left") {
+                if (lastDirection === "right") {
+                    newHead[0] += 1;
+                } else {
+                    newHead[0] -= 1;
+                    lastDirection = newDirection;
+                }
+            }
+
+            if (newDirection === "up") {
+                if (lastDirection === "down") {
+                    newHead[1] += 1;
+                } else {
+                    newHead[1] -= 1;
+                    lastDirection = newDirection;
+                }
+            }
+
+            if (newDirection === "down") {
+                if (lastDirection === "up") {
+                    newHead[1] -= 1;
+                } else {
+                    newHead[1] += 1;
+                    lastDirection = newDirection;
+                }
+            }
+
+            // Check wall collisions
+            if (
+                newHead[0] < 0 || newHead[0] >= gridSize ||
+                newHead[1] < 0 || newHead[1] >= gridSize
+            ) {
+                hitWall = true;
+                return;
+            }
+
+            // Check tail collisions
+            if (gridMatrix[newHead[0]][newHead[1]] === 2) {
+                hitTail = true;
+            }
+
+            // Check food collisions
+            if (gridMatrix[newHead[0]][newHead[1]] === 3) {
+                ateFood = true;
+            }
+
+            // Update the grid with new head
+            gridMatrix[newHead[0]][newHead[1]] = 1;
+
+            // Update the grid to have the old head become a tail; 1 -> 2
+            gridMatrix[snake[0][0]][snake[0][1]] = 2;
+
+            // Update the snake array with new head
+            // Add new head at the front
+            snake.unshift(newHead);
+
+            if (ateFood) {
+                addNewFood();
+                score += 1;
+                scoreDisplay.textContent = score;
+                speed = Math.max(300 - score * 10, 60); // Speed up as score increases
+                speedDisplay.textContent = speed;
+            } else {
+                let tail = snake.pop(); // Remove tail
+                gridMatrix[tail[0]][tail[1]] = 0; // Clear tail from grid
+            }
+        }
+
+        // Create a square array and return
+        function createMatrix(sideLength) {
+            const dynamic2DArray = [];
+
+            for (let i = 0; i < sideLength; i++) {
+                dynamic2DArray[i] = []; // Initialize a new inner array for each row
+                for (let j = 0; j < sideLength; j++) {
+                    // Filling all postitions with 0; 1 represents snake head; 2 represents snake tail; 3 represents food
+                    dynamic2DArray[i][j] = 0;
+                }
+            }
+            return dynamic2DArray;
+        }
+
+        // Draw
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            ctx.fillStyle = "white"; // white lines as background
+            ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the background
+            drawEverything(); // Dark red snake head, red snake tail, green food
+
+            // Draw Snake and Food
+            function drawEverything() {
+                for (let i = 0; i < gridSize; i++) {
+                    for (let j = 0; j < gridSize; j++) {
+                        // Empty postitions represent 0; 1 represents snake head; 2 represents snake tail; 3 represents food
+
+                        if (gridMatrix[i][j] === 1) { // Snake Head
+                            ctx.fillStyle = "rgb(255, 68, 0)";
+                            ctx.fillRect(i * gridSize, j * gridSize, gridSize - 0.5, gridSize - 0.5);
+                        }
+                        else if (gridMatrix[i][j] === 2) { // Snake Tail
+                            ctx.fillStyle = "rgb(244, 154, 35)";
+                            ctx.fillRect(i * gridSize, j * gridSize, gridSize - 0.5, gridSize - 0.5);
+                        }
+                        else if (gridMatrix[i][j] === 3) { // Food
+                            ctx.fillStyle = "rgb(0, 182, 6)";
+                            ctx.fillRect(i * gridSize, j * gridSize, gridSize - 0.5, gridSize - 0.5);
+                        } else {
+                            ctx.fillStyle = "rgb(67, 67, 67)";
+                            ctx.fillRect(i * gridSize, j * gridSize, gridSize - 0.5, gridSize - 0.5);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Store the timeout ID for the game loop
+        let gameLoopTimeoutId = null;
+
+        // Only add the keydown event listener once
+        let keyListenerAdded = false;
+
+        // Function to reset game state
+        function resetGame() {
+            // Reset core variables
+            snake = [
+                [9, 9],
+                [8, 9]
+            ];
+            lastDirection = 'right';
+            newDirection = "right";
+            ateFood = false;
+            hitTail = false;
+            hitWall = false;
+            gridMatrix = createMatrix(gridSize);
+            gameStarted = false;
+            score = 0;
+            scoreDisplay.textContent = score;
+            speed = Math.max(300 - score * 10, 60);
+            speedDisplay.textContent = speed;
+
+            // Place snake on grid
+            gridMatrix[9][9] = 1;
+            gridMatrix[8][9] = 2;
+
+            addNewFood();
+
+            // Clear canvas
+            ctx.clearRect(0, 0, 400, 400);
+
+            // Cancel the current game loop if it exists
+            if (gameLoopTimeoutId) {
+                clearTimeout(gameLoopTimeoutId);
+                gameLoopTimeoutId = null;
+            }
+
+            draw();
+        }
+
+        // Loop the game
+        function gameLoop() {
+            // Start the game
+            gameStarted = true;
+
+            // Add keydown event listener only once
+            if (!keyListenerAdded) {
+                document.addEventListener('keydown', (event) => {
+                    // Prevent default scrolling behavior for arrow keys if needed
+                    event.preventDefault();
+                    switch (event.key) {
+                        case 'ArrowUp':
+                            if (lastDirection !== 'down') newDirection = "up";
+                            break;
+                        case 'ArrowDown':
+                            if (lastDirection !== 'up') newDirection = "down";
+                            break;
+                        case 'ArrowLeft':
+                            if (lastDirection !== 'right') newDirection = "left";
+                            break;
+                        case 'ArrowRight':
+                            if (lastDirection !== 'left') newDirection = "right";
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                keyListenerAdded = true;
+            }
+
+            // Move the snake first to get new head position
+            moveSnake(ateFood);
+            ateFood = false;
+
+            // Now get the new head
+            let newHead = snake[0];
+
+            // Check for wall and tail collisions
+            if (hitWall || hitTail) {
+                gameStarted = false;
+                return; // Don't continue the loop
+            }
+
+            draw();
+
+            // Speed up as the score increases (minimum 60ms interval)
+            speed = Math.max(300 - score * 10, 10);
+            gameLoopTimeoutId = setTimeout(gameLoop, speed);
+        }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            if (!gameStarted) {
+                gameLoop();
+            }
+        });
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            resetGame();
+        });
+    </script>
+</body>
+
+</html>
