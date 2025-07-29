@@ -6,7 +6,7 @@
     <title>Snake Videogame - JavaScript</title>
     <style>
         canvas {
-            border: 5px solid rgb(0, 216, 232);
+            border: 10px solid rgb(124, 0, 0);           
         }
     </style>
 </head>
@@ -31,9 +31,13 @@
         </div>
     </nav>
 
-    <h4>Welcome to the snake game! Use the arrow keys to move.
+    <h4 style="margin-bottom: 10px;">Welcome to the snake game!
+        <br><br>
+        Use the arrow keys to move.
         <br>
-        Your snake will move faster as it eats food, and the game will end if it collides with itself or the wall.
+        Your snake will move faster as it eats food
+        <br>
+        The game will end if it collides with itself or the wall.
     </h4>
 
     <div style="margin: 15px;">
@@ -72,7 +76,7 @@
         let score = 0;
         const scoreDisplay = document.getElementById('score');
         scoreDisplay.textContent = score;
-        let speed = Math.max(300 - score * 10, 60);
+        let speed = Math.max(300 - score * 5, 60);
         const speedDisplay = document.getElementById('speed');
         speedDisplay.textContent = speed;
         gridMatrix[9][9] = 1; // Add to the grid
@@ -225,6 +229,10 @@
                         }
                     }
                 }
+                // Draw extra border to help outline
+                ctx.strokeStyle = "rgb(124, 0, 0)";
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(0, 0, canvas.width, canvas.height); // Draw border
             }
         }
 
@@ -250,7 +258,7 @@
             gameStarted = false;
             score = 0;
             scoreDisplay.textContent = score;
-            speed = Math.max(300 - score * 10, 60);
+            speed = Math.max(300 - score * 5, 60);
             speedDisplay.textContent = speed;
 
             // Place snake on grid
@@ -317,7 +325,8 @@
             draw();
 
             // Speed up as the score increases (minimum 60ms interval)
-            speed = Math.max(300 - score * 10, 10);
+            speed = Math.max(300 - score * 5, 10);
+            speedDisplay.textContent = speed;
             gameLoopTimeoutId = setTimeout(gameLoop, speed);
         }
 
