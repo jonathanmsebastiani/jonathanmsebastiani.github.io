@@ -8,6 +8,18 @@
 
 </head>
 
+<script>
+  function copyText(inputID) {
+    var copySpan = document.getElementById(inputID);
+    var text = copySpan.textContent;
+    navigator.clipboard.writeText(text);
+  }
+  function changeButtonText(inputID) {
+    const button = document.getElementById(inputID);
+    button.textContent = "Copied!";
+  }
+</script>
+
 <body>
 
   <h1>Jonathan Sebastiani's<br>Portfolio Webpage</h1>
@@ -18,33 +30,52 @@
     <a class="nav-item" href="CV.html">CV and Transcript</a>
 
     <div class="nav-item dropdown">
-      Notable Projects &#x25BE
+      Academic Projects &#x25BE
       <div class="dropdown-content">
         <a href="bioinformatics.html">Bioinformatics</a>
         <a href="networkanalysis.html">Network Analysis</a>
         <a href="environmentalmonitoring.html">Environmental Monitoring</a>
         <a href="advancedDataVis.html">Advanced Data Visualization</a>
-        <a href="JavaScriptGame.html">Snake Videogame - JavaScript</a>
+      </div>
+    </div>
+    <div class="nav-item dropdown">
+      Personal Projects &#x25BE
+      <div class="dropdown-content">
+        <a href="JavaScriptGame.html">Snake Game</a>
       </div>
     </div>
   </nav>
 
-  <h2 style="margin-top: 20px;">Contact Info</h2>
-  <p style="margin-bottom: 20px;">Email: jonathanmsebastiani@gmail.com<br>Phone: 360-220-3398</p>
-
-  <p style = "border-style: solid; padding: 5px; border-radius: 2px; max-width: 800px; margin: auto; background-color: whitesmoke;">
-    Dedicated data visualization graduate who is driven, technically strong, and adaptable. Aiming to leverage my interdisciplinary background, intellectual curiosity, and personal values to advance data and software projects toward impactful results. Frequently praised as a problem solver and driving force in team projects by my peers and supervisors, I will be an asset to any group in achieving its goals.
+  <h2 style="margin-top: 25px; margin-bottom: 15px;">Contact Info</h2>
+  <p style="margin-bottom: 20px; border: 4px double darkgreen; line-height: 35px; padding: 10px 80px; display: inline-block; max-width: 900px;">
+    <strong>Email: </strong><span id="emailText">jonathanmsebastiani@gmail.com</span> <button id="emailButton" onclick="copyText('emailText'); changeButtonText('emailButton')">Copy</button> <br>
+    <strong>Phone: </strong><span id="phoneText">3602203398</span> <button id="phoneButton" onclick="copyText('phoneText'); changeButtonText('phoneButton')">Copy</button> <br>
+    <strong>Address: </strong>Seattle, WA 98115 <br>
+    <strong>GitHub: </strong><span id="githubText">https://github.com/jonathanmsebastiani</span> <button id="githubButton" onclick="copyText('githubText'); changeButtonText('githubButton')">Copy</button> <br>
+    <strong>LinkedIn: </strong><span id="linkedinText">https://www.linkedin.com/in/jonathanmsebastiani/</span> <button id="linkedinButton" onclick="copyText('linkedinText'); changeButtonText('linkedinButton')">Copy</button>
   </p>
 
-  <img style="margin-top: 20px;" src="index_Files/GraduationPicture.jpg" alt="2025 UWB Gradutation" width="500px" >
+  <hr style="margin-bottom: 30px;">
 
-  <br>
+  <div style="display: flex; align-items: flex-start; gap: 40px; margin-top: 20px; margin-bottom: 20px; margin-left: 13vw; margin-right: 13vw;">
+    <img src="index_Files/GraduationPicture.jpg" alt="2025 UWB Gradutation" width="400px" style="flex-shrink: 0; border-radius: 8px;">
+    <div style="flex: 1; min-width: 300px;">
+      <h2>About Me</h2>
+      <p style="border-style: solid; padding: 5px; border-radius: 2px; background-color: whitesmoke; line-height: 30px;">
+        Dedicated data visualization graduate who is driven, technically strong, and adaptable. Aiming to leverage my interdisciplinary background, intellectual curiosity, and personal values to advance data and software projects toward impactful results. Frequently praised as a problem solver and driving force in team projects by my peers and supervisors, I will be an asset to any group in achieving its goals.
+      </p>
+      <h2 style="margin-top: 20px;">About This Website</h2>
+      <p style="border-style: solid; padding: 5px; border-radius: 2px; background-color: whitesmoke; line-height: 30px;">
+        While I did <strong>not</strong> learn web development from professional education, I developed my skills by utilizing open-source resources and developed this portfolio website to showcase my ambition and adaptability as a software professional. I elaborate on my most proud achievements through specific web development techniques, and I intend to continue developing my website as I deepen my web development skills and gain more experience. I hope that my portfolio website will give others a better understanding of my background, skills, and diverse academic and personal experiences.
+      </p>
+    </div>
+  </div>
 
-  <div style="position: relative; bottom: 0; text-align: center;">
-    <br>
-    <h5 style = "margin-bottom: 50px; font-size: 80%;">
-      Developed by: Jonathan Sebastiani (Currently in development)<br>
-      Last updated: July 29th, 2025</h5>
+  <div style="margin-bottom: 50px; position: relative; bottom: 0; text-align: center;">
+    <hr style="margin-top: 30px;">
+    <p style = "margin-top: 50px; font-size: 80%;">
+      <strong>Developed by: </strong>Jonathan Sebastiani (me)<br>
+      <strong>Last updated: </strong>August 3rd, 2025</p>
   </div>
 
 </body>
