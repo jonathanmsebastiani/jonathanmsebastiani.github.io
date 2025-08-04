@@ -6,7 +6,7 @@
     <title>Snake Videogame - JavaScript</title>
     <style>
         canvas {
-            border: 10px solid rgb(124, 0, 0);           
+            border: 10px solid rgb(124, 0, 0);
         }
     </style>
 </head>
@@ -41,10 +41,15 @@
 
     <h2 style="margin-bottom: 25px;">Welcome to the Snake Game!</h2>
 
-    <p style = "border-style: solid; padding: 5px; border-radius: 2px; max-width: 800px; margin: auto; background-color: whitesmoke;">
+    <p
+        style="border-style: solid; padding: 5px; border-radius: 2px; max-width: 800px; margin: auto; background-color: whitesmoke;">
         I developed this Snake Game using JavaScript and HTML5 Canvas as a personal project and to showcase my skills in web development.
+        <br><br>
+        This game is <strong>not</strong> compatible with mobile devices, as it requires keyboard input to control the snake.
+        <br><br>
+        My code for this game on GitHub <a href="https://github.com/jonathanmsebastiani/jonathanmsebastiani.github.io/blob/main/JavaScriptGame.html" target="_blank"><img src="index_Files/openInNewTapIcon.png" width="23px" style="position: relative; top: 5px;" alt="GitHub link to this websites code"></a>
     </p>
-    
+
     <p style="font-size: 23px; margin-top: 20px; margin-bottom: 20px;">
         Use the arrow keys to move.<br>
         Your snake will move faster as it eats food <br>
@@ -60,7 +65,7 @@
         Speed: <span id="speed">300</span>ms/tile
     </div>
 
-    <canvas id="game" width="400" height="400" style="margin-bottom: 100px;">The game canvas could not be loaded</canvas>
+    <canvas id="game" width="400" height="400" style="margin-bottom: 80px;">The game canvas could not be loaded</canvas>
 
     <script>
         // Setup
