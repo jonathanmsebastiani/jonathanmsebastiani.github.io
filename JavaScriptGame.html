@@ -18,7 +18,7 @@
     <nav>
         <a class="nav-item" href="index.html">Home</a>
 
-        <a class="nav-item" href="CV.html">CV and Transcript</a>
+        <a class="nav-item" href="CV.html">CV and UWB Diploma</a>
 
         <div class="nav-item dropdown">
             Academic Projects &#x25BE
@@ -66,6 +66,12 @@
     </div>
 
     <canvas id="game" width="400" height="400" style="margin-bottom: 80px;">The game canvas could not be loaded</canvas>
+
+    <form action="database.php" method="post" style="margin-bottom: 20px;">
+        <label for="playerName">Enter your name:</label>
+        <input type="text" id="playerName" name="playerName" required>
+        <button type="submit">Save Name</button>
+    </form>
 
     <script>
         // Setup
