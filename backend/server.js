@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI is not defined!");
+  process.exit(1); // stop the server
+}
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
