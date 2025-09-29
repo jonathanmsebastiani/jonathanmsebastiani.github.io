@@ -27,7 +27,8 @@
                 <a href="networkanalysis.html">Network Analysis</a>
                 <a href="environmentalmonitoring.html">Environmental Monitoring</a>
                 <a href="advancedDataVis.html">Advanced Data Visualization</a>
-                <a href="dataStructuresAlgorithmsAndDiscreteMathematics.html">Data Structures, Algorithms, and Discrete Mathematics</a>
+                <a href="dataStructuresAlgorithmsAndDiscreteMathematics.html">Data Structures, Algorithms, and Discrete
+                    Mathematics</a>
             </div>
         </div>
         <div class="nav-item dropdown">
@@ -40,22 +41,99 @@
 
     <br>
 
-    <h2 style="margin-bottom: 25px;">Welcome to the Snake Game!</h2>
-
-    <p
+    <h2 style="margin-bottom: 25px;">About</h2>
+    <div
         style="border-style: solid; padding: 5px; border-radius: 2px; max-width: 800px; margin: auto; background-color: whitesmoke;">
-        I developed this Snake Game using JavaScript and HTML5 Canvas as a personal project and to showcase my skills in web development.
-        <br><br>
-        This game is <strong>not</strong> compatible with mobile devices, as it requires keyboard input to control the snake.
-        <br><br>
-        My code for this game on GitHub <a href="https://github.com/jonathanmsebastiani/jonathanmsebastiani.github.io/blob/main/JavaScriptGame.html" target="_blank"><img src="index_Files/openInNewTapIcon.png" width="23px" style="position: relative; top: 5px;" alt="GitHub link to this websites code"></a>
-    </p>
+        <p>
+            This project is a web-based Snake game with an integrated leaderboard that tracks and displays the 5 top
+            players
+            and their score. I built the game logic with JavaScript, HTML, and CSS, then created a backend using
+            Node.js,
+            Express, and MongoDB Atlas to store data. The project demonstrates skills in
+            full-stack development, database integration, REST APIs, and dynamic UI design, as well as best web-dev
+            practices like using environment variables for security and structuring data for efficient data queries.
+            <br><br>
 
-    <p style="font-size: 23px; margin-top: 20px; margin-bottom: 20px;">
-        Use the arrow keys to move.<br>
-        Your snake will move faster as it eats food <br>
-        The game will end if it collides with itself or the wall. <br>
-    </p>
+            Frontend code (GitHub) <a
+                href="https://github.com/jonathanmsebastiani/jonathanmsebastiani.github.io/blob/main/JavaScriptGame.html"
+                target="_blank"><img src="index_Files/openInNewTapIcon.png" width="23px"
+                    style="position: relative; top: 5px;" alt="GitHub link to this websites code"></a>
+            &nbsp; &nbsp; | &nbsp; &nbsp;Backend code (GitHub) <a
+                href="https://github.com/jonathanmsebastiani/jonathanmsebastiani.github.io/blob/main/backend"
+                target="_blank"><img src="index_Files/openInNewTapIcon.png" width="23px"
+                    style="position: relative; top: 5px;" alt="GitHub link to this websites code"></a>
+        </p>
+    </div>
+
+    <!-- Wrapper for two-column layout -->
+    <div style="
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    width: 100%; 
+    max-width: 1000px; 
+    margin: 40px auto; 
+    border-left: 2px solid black; 
+    border-right: 2px solid black;
+">
+
+        <!-- Left side (How to Play) -->
+        <div style="
+        flex: 1; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 0 40px; 
+        border-right: 2px solid black;
+    ">
+            <h2 style="margin-bottom: 25px;">How to Play</h2>
+            <div
+                style="max-width: 300px; text-align: center; background-color: whitesmoke; padding: 15px; border: 1px solid black;">
+                <ul style="
+                font-size: 20px; 
+                margin: 20px auto; 
+                padding-left: 20px; 
+                line-height: 1.6; 
+                text-align: left;
+            ">
+                    <li style="margin-bottom: 15px;">Use the arrow keys to move.</li>
+                    <li style="margin-bottom: 15px;">The more food the snake eats, the faster it will move.</li>
+                    <li style="margin-bottom: 15px;">The game ends if the snake collides with itself or a wall.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right side (Leaderboard) -->
+        <div style="
+        flex: 1; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 0 40px;
+    ">
+            <h3 style="margin-bottom: 25px;">Top 5 Leaderboard</h3>
+            <div id="leaderboard" style="width: 100%; max-width: 500px; text-align: center;">
+                <table id="leaderboardTable"
+                    style="border: 1px solid black; border-collapse: collapse; width: 100%; background-color: whitesmoke;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid black; padding: 8px;">Rank</th>
+                            <th style="border: 1px solid black; padding: 8px;">Name</th>
+                            <th style="border: 1px solid black; padding: 8px;">Score</th>
+                            <th style="border: 1px solid black; padding: 8px;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Scores will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <hr><hr><br>
+
     <div>
         <button id="startBtn">Start Game</button>
         <button id="resetBtn">Reset</button>
@@ -66,13 +144,14 @@
         Speed: <span id="speed">300</span>ms/tile
     </div>
 
-    <canvas id="game" width="400" height="400" style="margin-bottom: 80px;">The game canvas could not be loaded</canvas>
+    <div id="scoreInputDiv" style="display: none; margin-top: 20px; color: green;">
+        <label for="playerNameInput">Congrats, you made it on the leaderboard! Enter your name:</label>
+        <input type="text" id="playerNameInput" required>
+        <button id="submitScoreBtn">Submit Score</button>
+    </div>
+    <br>
 
-    <form action="database.php" method="post" style="margin-bottom: 20px;">
-        <label for="playerName">Enter your name:</label>
-        <input type="text" id="playerName" name="playerName" required>
-        <button type="submit">Save Name</button>
-    </form>
+    <canvas id="game" width="400" height="400" style="margin-bottom: 80px;">The game canvas could not be loaded</canvas>
 
     <script>
         // Setup
@@ -309,8 +388,9 @@
             // Add keydown event listener only once
             if (!keyListenerAdded) {
                 document.addEventListener('keydown', (event) => {
-                    // Prevent default scrolling behavior for arrow keys if needed
-                    event.preventDefault();
+                    // Don't block typing if an input is focused
+                    if (document.activeElement.tagName === 'INPUT') return;
+
                     switch (event.key) {
                         case 'ArrowUp':
                             if (lastDirection !== 'down') newDirection = "up";
@@ -325,9 +405,12 @@
                             if (lastDirection !== 'left') newDirection = "right";
                             break;
                         default:
-                            break;
+                            return; // Ignore other keys
                     }
+
+                    event.preventDefault(); // Only prevent default for arrow keys
                 });
+
                 keyListenerAdded = true;
             }
 
@@ -341,6 +424,7 @@
             // Check for wall and tail collisions
             if (hitWall || hitTail) {
                 gameStarted = false;
+                handleGameOver(); // <-- call leaderboard submission
                 return; // Don't continue the loop
             }
 
@@ -352,14 +436,134 @@
             gameLoopTimeoutId = setTimeout(gameLoop, speed);
         }
 
+        // Helper function to submit score to backend
+        async function submitScore(name, score) {
+            try {
+                const response = await fetch("http://localhost:4000/scores", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, score })
+                });
+
+                const data = await response.json();
+                console.log("Score saved:", data);
+                fetchLeaderboard(); // refresh leaderboard after submission
+            } catch (err) {
+                console.error("Error submitting score:", err);
+            }
+        }
+
+        // Fetch leaderboard and update HTML
+        async function fetchLeaderboard(currentPlayerScore = null) {
+            try {
+                const response = await fetch("http://localhost:4000/scores");
+                const scores = await response.json();
+
+                // Sort descending
+                scores.sort((a, b) => b.score - a.score);
+                const topScores = scores.slice(0, 5); // Get top 5 scores
+
+                const leaderboardBody = document.getElementById("leaderboardBody");
+                leaderboardBody.innerHTML = ""; // clear existing
+
+                let isTop10 = false;
+
+                // Find distinct top scores for medal positions
+                const medalScores = [];
+                for (let i = 0; i < topScores.length; i++) {
+                    if (!medalScores.includes(topScores[i].score)) {
+                        medalScores.push(topScores[i].score);
+                    }
+                    if (medalScores.length === 3) break; // only need top 3 unique scores
+                }
+
+                topScores.forEach((entry, index) => {
+                    const row = document.createElement("tr");
+                    const dateStr = entry.createdAt ? new Date(entry.createdAt).toLocaleDateString() : "N/A";
+
+                    // Decide background color based on score group
+                    let bgColor = "";
+                    if (entry.score === medalScores[0]) bgColor = "gold";
+                    else if (medalScores[1] !== undefined && entry.score === medalScores[1]) bgColor = "silver";
+                    else if (medalScores[2] !== undefined && entry.score === medalScores[2]) bgColor = "#cd7f32";
+
+                    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${entry.name}</td>
+        <td>${entry.score}</td>
+        <td>${dateStr}</td>
+    `;
+                    if (bgColor) row.style.backgroundColor = bgColor;
+
+                    leaderboardBody.appendChild(row);
+                });
+
+                // Show input box if player scored in top 10
+                const scoreInputDiv = document.getElementById("scoreInputDiv");
+                if (isTop10 && currentPlayerScore !== null) {
+                    scoreInputDiv.style.display = "block";
+                    document.getElementById("playerNameInput").focus();
+                } else {
+                    scoreInputDiv.style.display = "none";
+                }
+
+            } catch (err) {
+                console.error("Error fetching leaderboard:", err);
+            }
+        }
+
+        // Call this when the game ends
+        function handleGameOver() {
+            // Check if score qualifies for top 10
+            fetch("http://localhost:4000/scores")
+                .then(res => res.json())
+                .then(scores => {
+                    scores.sort((a, b) => b.score - a.score);
+                    const topScores = scores.slice(0, 10);
+                    const minTopScore = topScores.length < 10 ? 0 : topScores[topScores.length - 1].score;
+
+                    const scoreInputDiv = document.getElementById("scoreInputDiv");
+                    const nameInput = document.getElementById("playerNameInput");
+
+                    if (score > minTopScore) {
+                        // Show input box
+                        scoreInputDiv.style.display = "block";
+                        nameInput.focus(); // <-- Auto-focus here
+                    } else {
+                        // Just reset the game
+                        resetGame();
+                    }
+                });
+        }
+
+        // Handle start button
         document.getElementById('startBtn').addEventListener('click', () => {
             if (!gameStarted) {
                 gameLoop();
             }
         });
+
+        // Handle reset button
         document.getElementById('resetBtn').addEventListener('click', () => {
             resetGame();
         });
+
+        // Handle score submission
+        document.getElementById("submitScoreBtn").addEventListener("click", () => {
+            const nameInput = document.getElementById("playerNameInput");
+            const playerName = nameInput.value.trim();
+            if (playerName) {
+                submitScore(playerName, score);
+                nameInput.value = ""; // clear input
+                document.getElementById("scoreInputDiv").style.display = "none";
+                resetGame();
+            }
+        });
+
+        // Load leaderboard when page loads
+        fetchLeaderboard();
     </script>
 </body>
 
