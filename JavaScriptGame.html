@@ -481,7 +481,7 @@
 
                 topScores.forEach((entry, index) => {
                     const row = document.createElement("tr");
-                    const dateStr = entry.createdAt ? new Date(entry.createdAt).toLocaleDateString() : "N/A";
+                    const dateStr = entry.date ? new Date(entry.date).toLocaleString() : "N/A";
 
                     // Decide background color based on score group
                     let bgColor = "";
