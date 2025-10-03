@@ -124,7 +124,9 @@
                         </tr>
                     </thead>
                     <tbody id="leaderboardBody">
-                        <!-- Scores will be populated here -->
+                        <tr id="loadingRow">
+                            <td colspan="4" style="text-align:center;">Loading<span id="loadingDots"></span></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -455,18 +457,47 @@
             }
         }
 
+        let dotCount = 0;
+        let loadingInterval;
+
+        // Start loading animation for leaderboard
+        function startLoadingAnimation() {
+            const dots = document.getElementById("loadingDots");
+            dotCount = 0;
+            loadingInterval = setInterval(() => {
+                dotCount = (dotCount + 1) % 4; // cycles 0,1,2,3
+                dots.textContent = ".".repeat(dotCount);
+            }, 500);
+        }
+
+        // Stop loading animation for leaderboard
+        function stopLoadingAnimation() {
+            clearInterval(loadingInterval);
+            const dots = document.getElementById("loadingDots");
+            if (dots) dots.textContent = "";
+        }
+
         // Fetch leaderboard and update HTML
         async function fetchLeaderboard(currentPlayerScore = null) {
             try {
+                // Show loading row + start animation
+                const leaderboardBody = document.getElementById("leaderboardBody");
+                leaderboardBody.innerHTML = `
+                    <tr id="loadingRow">
+                    <td colspan="4" style="text-align:center;">(ext time <20s) Loading<span id="loadingDots"></span></td>
+                    </tr>
+                `;
+                startLoadingAnimation();
+
                 const response = await fetch("https://leaderboard-backend-esd8.onrender.com/scores");
                 const scores = await response.json();
+
+                stopLoadingAnimation();
+                leaderboardBody.innerHTML = ""; // clear loading row
 
                 // Sort descending
                 scores.sort((a, b) => b.score - a.score);
                 const topScores = scores.slice(0, 5); // Get top 5 scores
-
-                const leaderboardBody = document.getElementById("leaderboardBody");
-                leaderboardBody.innerHTML = ""; // clear existing
 
                 let isTop10 = false;
 
